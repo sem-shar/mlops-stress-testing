@@ -31,3 +31,9 @@ jobs:
 
     - name: Run recall test
       run: python tests/recall_test.py
+    
+    - name: Simulate data
+      run: python simulate_data.py
+    
+    - name: Run drift test
+      run: python tests/drift_test.py
