@@ -2,6 +2,14 @@ import pandas as pd
 import pickle
 import sys
 
+import json
+
+with open('models/best_model.json', 'r') as f:
+    best_model_name = json.load(f)['best_model']
+
+with open(f'models/{best_model_name}.pkl', 'rb') as f:
+    model = pickle.load(f)
+
 print("robustness test started")
 
 # Load test data

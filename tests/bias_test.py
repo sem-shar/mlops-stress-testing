@@ -3,6 +3,14 @@ import pandas as pd
 import pickle
 import sys
 
+import json
+
+with open('models/best_model.json', 'r') as f:
+    best_model_name = json.load(f)['best_model']
+
+with open(f'models/{best_model_name}.pkl', 'rb') as f:
+    model = pickle.load(f)
+
 # Load test data
 X_test = pd.read_csv('data/X_test.csv')
 y_test = pd.read_csv('data/y_test.csv').squeeze()

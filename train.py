@@ -66,3 +66,44 @@ for name, model in models.items():
         
         with open(f'models/{name}.pkl', 'wb') as f:
             pickle.dump(model, f)
+
+# Model selection based on combined score
+import json
+
+model_scores = {}
+
+for name in models.keys():
+    with open(f'models/{name}.pkl', 'rb') as f:
+        m = pickle.load(f)
+    
+    preds = m.predict(X_test)
+    
+    # Recall score
+    rec = recall_score(y_test, preds)
+    
+    # Bias score
+    X_temp = X_test.copy()
+    X_temp['predictions'] = preds
+    male_rate = X_temp[X_temp['sex'] == 1]['predictions'].mean()
+    female_rate = X_temp[X_temp['sex'] == 0]['predictions'].mean()
+    bias = abs(male_rate - female_rate)
+    bias_score = 1 - bias  # higher is better
+    
+    # Robustness score
+    X_nudged = X_test.copy()
+    X_nudged['hours.per.week'] = X_nudged['hours.per.week'] + 1
+    nudged_preds = m.predict(X_nudged)
+    flip_rate = (preds != nudged_preds).sum() / len(preds)
+    robustness_score = 1 - flip_rate  # higher is better
+    
+    # Combined score
+    combined = (rec + bias_score + robustness_score) / 3
+    model_scores[name] = combined
+    print(f"{name} - Combined Score: {combined:.4f}")
+
+best_model_name = max(model_scores, key=model_scores.get)
+print(f"\nBest model: {best_model_name}")
+
+# Save best model name for other scripts to use
+with open('models/best_model.json', 'w') as f:
+    json.dump({"best_model": best_model_name}, f)

@@ -3,6 +3,14 @@ import pickle
 import sys
 from sklearn.metrics import recall_score
 
+import json
+
+with open('models/best_model.json', 'r') as f:
+    best_model_name = json.load(f)['best_model']
+
+with open(f'models/{best_model_name}.pkl', 'rb') as f:
+    model = pickle.load(f)
+
 print("recall test started")
 
 X_test = pd.read_csv('data/X_test.csv')
