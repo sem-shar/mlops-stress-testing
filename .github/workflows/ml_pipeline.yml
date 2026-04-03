@@ -28,3 +28,6 @@ jobs:
     
     - name: Run robustness test
       run: python tests/robustness_test.py
+
+    - name: Run recall test
+      run: python tests/recall_test.py
