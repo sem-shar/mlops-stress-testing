@@ -25,7 +25,7 @@ original_predictions = model.predict(X_test)
 features_to_perturb = ['hours.per.week', 'capital.gain', 'age']
 
 # Noise levels: 10%, 50%, 100% of each feature's std
-noise_levels = [0.1, 0.5, 1.0]
+noise_levels = [0.1, 0.5]
 
 print("\n--- Progressive Perturbation Results ---")
 all_flip_rates = []
